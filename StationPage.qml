@@ -1,0 +1,86 @@
+import QtQuick 2.7
+import QtCharts 2.1
+
+ChartView{
+    id: chartView
+    theme: ChartView.ChartThemeDark
+    antialiasing: true
+
+
+   MultiPointTouchArea
+   {
+       anchors.fill: parent
+       minimumTouchPoints: 1
+       maximumTouchPoints: 2
+       mouseEnabled: true
+       touchPoints: [
+           TouchPoint { id: touch1 },
+           TouchPoint { id: touch2 }
+       ]
+
+//               onReleased: {
+//                    testLabel.text = touch1.x
+//               }
+
+       onPressed: {
+           initialX = touch1.x
+       }
+
+       onGestureStarted:
+       {
+
+
+           axisX1.min = new Date(axisX1.min - (touch1.x - initialX))
+           axisX1.max = new Date(axisX1.max - (touch1.x - initialX))
+       }
+   }
+
+   LogValueAxis{
+       id: axisY1
+       base: 10
+       max: 1e-5
+       min: 1e-11
+       labelFormat: "%.2e"
+   }
+
+   DateTimeAxis{
+       id: axisX1
+       tickCount: 10
+       min: new Date(new Date() - 10000)
+       max: new Date()
+//     format: "MMM dd:hh:mm:ss"
+        format: "mm:ss"
+
+   }
+
+   LineSeries{
+       id: mySeries
+       name: "Pressure"
+       axisX: axisX1
+       axisY: axisY1
+       useOpenGL: true
+        width: 4
+        color: "red"
+        style: Qt.DotLine
+
+   }
+
+   Timer{
+       id: testTimer
+       interval: 1000
+       repeat: true
+       running: true
+       onTriggered: {
+
+           axisX1.min = new Date(new Date() - 10000)
+           axisX1.max = new Date()
+           mySeries.append(toMsecsSinceEpoch(new Date()), 5e-8)
+
+       }
+
+       function toMsecsSinceEpoch(date) {
+           var msecs = date.getTime();
+           return msecs;
+       }
+    }
+}
