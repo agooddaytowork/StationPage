@@ -28,7 +28,7 @@ ChartView{
 
        onGestureStarted:
        {
-
+         testLabel.text = touch1.x - initialX
 
            axisX1.min = new Date(axisX1.min - (touch1.x - initialX))
            axisX1.max = new Date(axisX1.max - (touch1.x - initialX))
@@ -48,8 +48,8 @@ ChartView{
        tickCount: 10
        min: new Date(new Date() - 10000)
        max: new Date()
-//     format: "MMM dd:hh:mm:ss"
-        format: "mm:ss"
+       format: "MMM dd:hh:mm:ss"
+
 
    }
 
@@ -67,7 +67,7 @@ ChartView{
 
    Timer{
        id: testTimer
-       interval: 1000
+       interval: 3000
        repeat: true
        running: true
        onTriggered: {

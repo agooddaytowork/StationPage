@@ -55,20 +55,12 @@ ApplicationWindow {
                     text: model.modelData.stationName
                     x: model.modelData.left
                     y: model.modelData.top
-                    onPressAndHold:
+                    onClicked:
                     {
                         popup.x = station.x
                         popup.y = station.y
                         popup.open()
                         informLabel.text = station.text
-                    }
-
-                    onClicked:
-                    {
-                        popup2.x = station.x
-                        popup2.y = station.y
-                        popup2.open()
-                        informLabel1.text = "TADA"
                     }
 
                 }
@@ -88,6 +80,16 @@ ApplicationWindow {
           {
               anchors.fill: parent
 
+                      StationPage{
+                          id: chartView
+                          anchors.top: parent.top
+                          anchors.left: parent.left
+                          anchors.leftMargin: 40
+                          anchors.topMargin: 20
+                          width: 500
+                          height: 500
+                      }
+
                       Label
                       {
                           id: informLabel
@@ -102,39 +104,11 @@ ApplicationWindow {
                   }
               }
           }
+
+
+
+
       }
-
-    Popup {
-          id: popup2
-          x: 200
-          y: 300
-          width: 600
-          height: 600
-          modal: true
-          focus: true
-          closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
-
-          ColumnLayout
-          {
-              anchors.fill: parent
-
-                      Label
-                      {
-                          id: informLabel1
-
-                      }
-              Button
-              {
-                  text:"Close"
-                  onClicked:
-                  {
-                      popup2.close()
-                  }
-              }
-          }
-      }
-
-
 
 //    GridView{
 //        id: thisList
