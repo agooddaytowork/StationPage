@@ -1,15 +1,29 @@
-#include "main.h"
+#include "stationobject.h"
+
 
 StationObject::StationObject(QObject *parent):QObject(parent)
 {
 
 }
 
-StationObject::StationObject(const QString &name, const double &top, const double &left, QObject *parent)
-    :QObject(parent), m_stationName(name), m_top(top), m_left(left)
+StationObject::StationObject(const int &id,const QString &name, const double &top, const double &left, QObject *parent)
+    :QObject(parent),m_id(id), m_stationName(name), m_top(top), m_left(left)
 {
 }
 
+int StationObject::stationId() const
+{
+    return m_id;
+}
+
+void StationObject::setStationId(const int &id)
+{
+    if(id != m_id)
+    {
+        m_id = id;
+        emit stationIdChanged();
+    }
+}
 
 QString StationObject::stationName() const
 {

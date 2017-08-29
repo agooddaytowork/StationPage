@@ -1,4 +1,4 @@
-QT += charts qml quick
+QT += charts qml quick core sql
 
 CONFIG += c++11
 
@@ -33,7 +33,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 HEADERS += \
     main.h \
     stationobject.h \
-    localdatabaseinterface.h
+    localdatabaseinterface.h \
+    anlogger.h
 
 target.path = /home/pi
 
