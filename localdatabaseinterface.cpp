@@ -1,5 +1,5 @@
 #include "localdatabaseinterface.h"
-
+#include <QRegExp>
 
 QT_CHARTS_USE_NAMESPACE
 #define LocalDatabaseInterfaceDebuggerEnabled 1
@@ -59,17 +59,23 @@ bool LocalDatabaseInterface::initializeLocalDatabaseStationHash()
 {
     QSqlQuery tmpQuery;
 
-    if(tmpQuery.exec("SELECT GlobalID, stationName, top, left_style FROM stations "))
+    if(tmpQuery.exec("SELECT id, stationName, top, left_style FROM stations "))
     {
         anIf(LocalDatabaseInterfaceDebuggerEnabled, anAck("Query succeeded: SELECT GlobalID, stationName, top, left_style FROM stations"));
 
         StationObject tmpStation;
         while(tmpQuery.next())
         {
-            tmpStation.setStationId(tmpQuery.value("GlobalID").toInt());
+            QString tmpTop = tmpQuery.value("top").toString();
+            QString tmpLeft = tmpQuery.value("left_style").toString();
+
+            tmpTop = tmpTop.remove((tmpTop.length()-2),2);
+            tmpLeft = tmpLeft.remove((tmpLeft.length()-2),2);
+
+            tmpStation.setStationId(tmpQuery.value("id").toInt());
             tmpStation.setStationName(tmpQuery.value("stationName").toString());
-            tmpStation.setTop(tmpQuery.value("top").toDouble());
-            tmpStation.setLeft(tmpQuery.value("left_style").toDouble());
+            tmpStation.setTop(tmpTop.toDouble());
+            tmpStation.setLeft(tmpLeft.toDouble());
 
             m_LocalDatabaseStationHash.insert(tmpStation.stationId(), &tmpStation);
 
@@ -110,4 +116,18 @@ void LocalDatabaseInterface::updateDataToGraph(QAbstractSeries *series)
 QHash<int, StationObject*> LocalDatabaseInterface::LocalDatabaseStationHash()
 {
     return m_LocalDatabaseStationHash;
+}
+
+QList<QObject*> LocalDatabaseInterface::populateStationModelList()
+{
+    QList<int> keyList = m_LocalDatabaseStationHash.keys();
+
+    QList<QObject*> tmpModelList;
+
+    for(int i = 0; i < keyList.length();i++)
+    {
+        tmpModelList.append(m_LocalDatabaseStationHash.value(keyList.at(i)));
+    }
+
+    return tmpModelList;
 }

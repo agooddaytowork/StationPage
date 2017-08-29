@@ -22,7 +22,7 @@ public:
     void stop();
 
     QHash<int, StationObject*> LocalDatabaseStationHash();
-
+    QList<QObject*> populateStationModelList();
 
 public slots:
     void initializeDataToGraph(QAbstractSeries *series);
@@ -36,6 +36,7 @@ private:
 
     QSqlDatabase localDb;
     QHash<int, StationObject*> m_LocalDatabaseStationHash;
+
 };
 
 #endif // LOCALDATABASEINTERFACE_H
